@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.28)
 
 # set the project name and version
-project(flood-puzzle LANGUAGES CXX VERSION 0.3)
+project(blackjack LANGUAGES CXX VERSION 0.3)
 
 set(CMAKE_CXX_STANDARD 23)
 
@@ -27,8 +27,6 @@ add_library(cppray
 )
 target_link_libraries(cppray PUBLIC raylib)
 
-add_executable(flood flood.cpp game.cpp block_grid.cpp)
-add_executable(animate-test animate-test.cpp animate-loop.cpp)
+add_executable(blackjack blackjack.cpp game.cpp deck.cpp hand.cpp card.cpp)
 
-target_link_libraries(flood cppray raylib)
-target_link_libraries(animate-test cppray raylib)
+target_link_libraries(blackjack cppray raylib)

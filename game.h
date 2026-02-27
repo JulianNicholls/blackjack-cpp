@@ -1,16 +1,16 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include <memory>
-
 #include "raylib.h"
 
-#include "block_grid.h"
 #include "button.h"
+#include "card.h"
+#include "deck.h"
+#include "hand.h"
 #include "images.h"
 #include "window.h"
 
-namespace Flood
+namespace Blackjack
 {
 
 enum struct GameState
@@ -31,8 +31,17 @@ class Game
     void update();
     void draw() const;
 
+    const ::Font &font() const
+    {
+        return font_;
+    };
+
+    const ::Texture2D images(std::string_view name) const
+    {
+        return images_.at(name);
+    }
+
   private:
-    void say_click_to_continue() const;
     void drawPlaying() const;
     void drawComplete() const;
 
@@ -40,11 +49,8 @@ class Game
     GameState state_;
     const ::Font font_;
     CPPRaylib::ImageLoader images_;
-    BlockGrid grid_;
-    ::Sound changeSound_;
-    CPPRaylib::Button exit_button_;
-
-    unsigned int moves_ = 0;
+    Hand hand_;
+    Deck deck_;
 };
 
 }

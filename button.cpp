@@ -63,10 +63,10 @@ void Button::draw() const
         const ::Rectangle shadow_rect{pos_.x + 4, pos_.y + 4, size_.x, size_.y};
 
         ::DrawRectangleRounded(
-            shadow_rect, 0.5f, 64, ::Fade(::ColorBrightness(bg, -0.4f), std::min(bg_colour_.a / 255.0f, 0.5f)));
+            shadow_rect, 0.4f, 64, ::Fade(::ColorBrightness(bg, -0.4f), std::min(bg_colour_.a / 255.0f, 0.5f)));
     }
 
-    ::DrawRectangleRounded(rect, 0.5f, 64, bg);
+    ::DrawRectangleRounded(rect, 0.4f, 64, bg);
 
     // The top need to be biased up a little because the text measure has a little more at the top than the bottom
     const auto left = pos_.x + (size_.x / 2.0f - text_measure_.x / 2.0f);
