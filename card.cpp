@@ -9,7 +9,6 @@ namespace Blackjack
 
 Card::Card(
     const Game &game,
-    ::Vector2 pos,
     unsigned rank,
     Suit suit,
     std::string_view backname,
@@ -17,7 +16,8 @@ Card::Card(
     float width,
     float height)
     : game_{game}
-    , outline_{pos.x, pos.y, width, height}
+    , width_{width}
+    , height_{height}
     , rank_{rank}
     , suit_{suit}
     , backname_{backname}
@@ -26,16 +26,19 @@ Card::Card(
     value_ = rank == 1 ? 11 : rank;
 }
 
-void Card::draw() const
+void Card::draw(float x, float y) const
 {
-    ::DrawRectangleRounded(outline_, 0.1f, 32, RAYWHITE);
-    const ::Vector2 pos{outline_.x + 5, outline_.y + 5};
+    ::DrawRectangleRounded({x, y, width_, height_}, 0.1f, 32, RAYWHITE);
+    const ::Vector2 pos{x + 5, y + 5};
+
+    using enum Suit;
 
     if (faceup_)
     {
-        const std::string text = "AS";
-        const ::Color colour = BLACK;
-        ::DrawTextEx(game_.font(), text.c_str(), pos, 36, 0, colour);
+        const ::Color colour = suit_ == Suit::Spades || suit_ == Suit::Clubs ? BLACK : RED;
+
+        ::DrawTextEx(game_.font(), rank_name().c_str(), pos, 36, 0, colour);
+        ::DrawTextureV(game_.images(suit_image_name()), {x + 25, y + 5}, WHITE);
     }
     else
     {

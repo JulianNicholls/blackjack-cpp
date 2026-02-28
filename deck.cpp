@@ -9,15 +9,15 @@ Deck::Deck(const Game &game)
 {
     for (unsigned r = 1; r <= 13; ++r)
     {
-        cards_.emplace_back(game, ::Vector2{0.0f, 0.0f}, r, Suit::Clubs, "CardBackRed");
-        cards_.emplace_back(game, ::Vector2{0.0f, 0.0f}, r, Suit::Diamonds, "CardBackRed");
-        cards_.emplace_back(game, ::Vector2{0.0f, 0.0f}, r, Suit::Hearts, "CardBackRed");
-        cards_.emplace_back(game, ::Vector2{0.0f, 0.0f}, r, Suit::Spades, "CardBackRed");
+        cards_.emplace_back(game, r, Suit::Clubs, "CardBackRed");
+        cards_.emplace_back(game, r, Suit::Diamonds, "CardBackRed");
+        cards_.emplace_back(game, r, Suit::Hearts, "CardBackRed");
+        cards_.emplace_back(game, r, Suit::Spades, "CardBackRed");
 
-        cards_.emplace_back(game, ::Vector2{0.0f, 0.0f}, r, Suit::Clubs, "CardBackBlue");
-        cards_.emplace_back(game, ::Vector2{0.0f, 0.0f}, r, Suit::Diamonds, "CardBackBlue");
-        cards_.emplace_back(game, ::Vector2{0.0f, 0.0f}, r, Suit::Hearts, "CardBackBlue");
-        cards_.emplace_back(game, ::Vector2{0.0f, 0.0f}, r, Suit::Spades, "CardBackBlue");
+        cards_.emplace_back(game, r, Suit::Clubs, "CardBackBlue");
+        cards_.emplace_back(game, r, Suit::Diamonds, "CardBackBlue");
+        cards_.emplace_back(game, r, Suit::Hearts, "CardBackBlue");
+        cards_.emplace_back(game, r, Suit::Spades, "CardBackBlue");
     }
 }
 

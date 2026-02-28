@@ -12,7 +12,7 @@ namespace Blackjack
 {
 class Game;
 
-enum struct Suit
+enum class Suit
 {
     Hearts,
     Diamonds,
@@ -25,7 +25,6 @@ class Card
   public:
     Card(
         const Game &game,
-        ::Vector2 pos,
         unsigned rank,
         Suit suit,
         std::string_view backname,
@@ -33,30 +32,43 @@ class Card
         float width = Constants::CardWidth,
         float height = Constants::CardHeight);
 
-    void draw() const;
-    void flip();
+    void draw(float x, float y) const;
+    void draw(::Vector2 pos) const
+    {
+        return draw(pos.x, pos.y);
+    };
+
+    void flip()
+    {
+        faceup_ = true;
+    }; // Flip up
+
+    float width() const
+    {
+        return width_;
+    }
+
+    float height() const
+    {
+        return height_;
+    }
 
     std::string suit_image_name() const;
 
     std::string to_string() const;
-
-    void set_position(::Vector2 pos)
-    {
-        outline_.x = pos.x;
-        outline_.y = pos.y;
-    }
 
   private:
     std::string rank_name() const;
     std::string suit_name() const;
 
     const Game &game_;
-    ::Rectangle outline_;
     unsigned rank_;
     Suit suit_;
     unsigned value_;
     std::string backname_;
     bool faceup_;
+    float width_;
+    float height_;
 };
 
 } // namespace Blackjack
