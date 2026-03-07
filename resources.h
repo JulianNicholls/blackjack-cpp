@@ -8,16 +8,17 @@
 namespace Blackjack::Constants
 {
 
-inline constexpr auto Margin = 40zu;
+inline constexpr auto WindowMargin = 40zu;
+inline constexpr auto HandMargin = 60zu;
 inline constexpr auto CardWidth = 250zu;
 inline constexpr auto CardHeight = 350zu;
 
-inline constexpr ::Vector2 PackPosition = {3 * Margin + 2 * CardWidth, Margin};
-inline constexpr ::Vector2 DealerRowStart = {Margin, Margin};
-inline constexpr ::Vector2 PlayerRowStart = {Margin, 2 * Margin + CardHeight};
+inline constexpr ::Vector2 PackPosition = {3 * WindowMargin + 2 * CardWidth, WindowMargin};
+inline constexpr ::Vector2 DealerRowStart = {WindowMargin, WindowMargin};
+inline constexpr ::Vector2 PlayerRowStart = {WindowMargin, 2 * WindowMargin + CardHeight};
 
-inline constexpr auto Width = Margin * 6 + 5 * CardWidth;
-inline constexpr auto Height = Margin * 3 + 2 * CardHeight;
+inline constexpr auto Width = WindowMargin * 6 + 5 * CardWidth;
+inline constexpr auto Height = WindowMargin * 3 + 2 * CardHeight;
 
 }
 

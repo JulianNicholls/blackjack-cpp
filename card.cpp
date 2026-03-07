@@ -29,6 +29,7 @@ Card::Card(
 void Card::draw(float x, float y) const
 {
     ::DrawRectangleRounded({x, y, width_, height_}, 0.1f, 32, RAYWHITE);
+    ::DrawRectangleRoundedLines({x, y, width_, height_}, 0.1f, 32, BLACK);
     const ::Vector2 pos{x + 5, y + 5};
 
     using enum Suit;
@@ -38,7 +39,7 @@ void Card::draw(float x, float y) const
         const ::Color colour = suit_ == Suit::Spades || suit_ == Suit::Clubs ? BLACK : RED;
 
         ::DrawTextEx(game_.font(), rank_name().c_str(), pos, 36, 0, colour);
-        ::DrawTextureV(game_.images(suit_image_name()), {x + 25, y + 5}, WHITE);
+        ::DrawTextureV(game_.images(suit_image_name()), {x + 30, y + 10}, WHITE);
     }
     else
     {
@@ -53,7 +54,7 @@ std::string Card::to_string() const
 
 std::string Card::suit_image_name() const
 {
-    return suit_name() + "-40";
+    return suit_name() + "-24";
 }
 
 std::string Card::suit_name() const
@@ -85,6 +86,8 @@ std::string Card::rank_name() const
 void swap(Card &a, Card &b) noexcept
 {
     using std::swap;
+
+    // No need (or possibiity) to swap Game&
 
     swap(a.rank_, b.rank_);
     swap(a.suit_, b.suit_);

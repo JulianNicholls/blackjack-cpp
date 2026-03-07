@@ -29,7 +29,7 @@ class Hand
         {
             const auto card = cards_[idx];
 
-            card.draw(pos.x + idx * (card.width() + Constants::Margin), pos.y);
+            card.draw(pos.x + idx * (/*card.width() +*/ Constants::HandMargin), pos.y);
         }
     };
 
