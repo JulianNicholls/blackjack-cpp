@@ -46,8 +46,24 @@ Game::Game(const CPPRaylib::Window &window)
     std::println("{}", card1.to_string());
     std::println("{}", card2.to_string());
 
-    hand_.add(card1);
-    hand_.add(card2);
+    player_hand_.add(card1);
+    player_hand_.add(card2);
+
+    auto card3 = deck_.deal();
+    auto card4 = deck_.deal();
+
+    card3.flip();
+
+    std::println("{}", card3.to_string());
+    std::println("{}", card4.to_string());
+
+    dealer_hand_.add(card3);
+    dealer_hand_.add(card4);
+
+    for (int i = 0; i < 10; ++i)
+    {
+        std::println("{}", deck_.deal().to_string());
+    }
 }
 
 Game::~Game()
@@ -75,24 +91,18 @@ void Game::update()
 void Game::draw() const
 {
     using namespace Constants;
-    ::DrawRectangleGradientV(0, 0, Width, Height, ::Color{0, 100, 40, 255}, ::Color{0, 70, 30, 255});
 
-    hand_.draw({CardRowStart.x, CardRowStart.y});
-    //    ::DrawRectangleRounded({PackPosition.x, PackPosition.y, CardWidth, CardHeight}, 0.1f, 32, RAYWHITE);
-    //    ::DrawTextureV(images_.at("CardBackRed"), {PackPosition.x + 5, PackPosition.y + 5}, WHITE);
-    //
-    //    ::DrawRectangleRounded({CardRowStart.x, CardRowStart.y, CardWidth, CardHeight}, 0.1f, 32, RAYWHITE);
-    //    ::DrawTextureV(images_.at("CardBackBlue"), {CardRowStart.x + 5, CardRowStart.y + 5}, WHITE);
-    //
-    //    ::DrawRectangleRounded(
-    //        {CardRowStart.x + CardWidth + Margin, CardRowStart.y, CardWidth, CardHeight}, 0.1f, 32, RAYWHITE);
-    //    ::DrawTextEx(font_, "A", {CardRowStart.x + CardWidth + Margin + 5, CardRowStart.y + 5}, 50, 0, BLACK);
-    //    ::DrawTextureV(images_.at("Spades-40"), {CardRowStart.x + CardWidth + Margin + 25, CardRowStart.y + 5},
-    //    WHITE);
+    ::DrawRectangleGradientV(0, 0, Width, Height, ::Color{0, 120, 50, 255}, ::Color{0, 60, 30, 255});
+
+    drawPlaying();
 }
 
 void Game::drawPlaying() const
 {
+    using namespace Constants;
+
+    dealer_hand_.draw({DealerRowStart.x, DealerRowStart.y});
+    player_hand_.draw({PlayerRowStart.x, PlayerRowStart.y});
 }
 
 void Game::drawComplete() const

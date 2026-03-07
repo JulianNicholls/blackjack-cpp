@@ -49,7 +49,8 @@ class Game
     GameState state_;
     const ::Font font_;
     CPPRaylib::ImageLoader images_;
-    Hand hand_;
+    Hand player_hand_;
+    Hand dealer_hand_;
     Deck deck_;
 };
 
