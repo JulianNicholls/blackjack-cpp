@@ -82,4 +82,17 @@ std::string Card::rank_name() const
     }
 }
 
+void swap(Card &a, Card &b) noexcept
+{
+    using std::swap;
+
+    swap(a.rank_, b.rank_);
+    swap(a.suit_, b.suit_);
+    swap(a.value_, b.value_);
+    swap(a.backname_, b.backname_);
+    swap(a.faceup_, b.faceup_);
+    swap(a.width_, b.width_);
+    swap(a.height_, b.height_);
+}
+
 } // namespace Blackjack

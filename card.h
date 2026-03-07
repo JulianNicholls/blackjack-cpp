@@ -57,6 +57,8 @@ class Card
 
     std::string to_string() const;
 
+    friend void swap(Card &a, Card &b) noexcept;
+
   private:
     std::string rank_name() const;
     std::string suit_name() const;

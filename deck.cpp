@@ -1,6 +1,12 @@
-#include "deck.h"
+#include <algorithm>
+#include <random>
+
 #include "card.h"
+#include "deck.h"
 #include "game.h"
+
+std::random_device rd;
+std::mt19937 mt(rd());
 
 namespace Blackjack
 {
@@ -19,6 +25,8 @@ Deck::Deck(const Game &game)
         cards_.emplace_back(game, r, Suit::Hearts, "CardBackBlue");
         cards_.emplace_back(game, r, Suit::Spades, "CardBackBlue");
     }
+
+    std::shuffle(cards_.begin(), cards_.end(), mt);
 }
 
 Card Deck::deal()
