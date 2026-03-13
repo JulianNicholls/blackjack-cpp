@@ -11,9 +11,11 @@ Button::Button(const ButtonSpec &spec)
     : bg_colour_{spec.bg_colour}
     , text_colour_{spec.text_colour}
     , hover_colour_{spec.hover_colour}
+    , disabled_colour_{spec.disabled_colour}
     , font_{spec.font}
     , caption_{spec.caption}
     , shadow_{spec.shadow}
+    , enabled_{true} // Always start enabled
 {
     font_size_ = spec.font_size == AUTO ? 36 : spec.font_size;
 
@@ -39,13 +41,14 @@ Button::Button(const ButtonSpec &spec)
         size_ = spec.size;
     }
 
-    // If the x or y position is negative, then it should be set so that the position is centred on that as a positive
-    // value.
+    // If the x or y position is negative, then it should be set so that the position is centred on
+    // that as a positive value.
     pos_.x = spec.pos.x > 0 ? spec.pos.x : -spec.pos.x - size_.x / 2.0f;
     pos_.y = spec.pos.y > 0 ? spec.pos.y : -spec.pos.y - size_.y / 2.0f;
 }
 
-// Draw the button, highlighting it in the hover colour if it is hovered
+// Draw the button, showing it as disabled if not enabled, highlighting it in the hover colour if it
+// is hovered
 void Button::draw() const
 {
     const auto mouse_pos = ::GetMousePosition();
@@ -55,7 +58,15 @@ void Button::draw() const
     // Use the hover colour or lighten the background when hovered
     if (::CheckCollisionPointRec(::GetMousePosition(), rect))
     {
-        bg = ::ColorIsEqual(hover_colour_, BLANK) ? ::ColorBrightness(bg_colour_, 0.2f) : hover_colour_;
+        bg = ::ColorIsEqual(hover_colour_, BLANK) ? ::ColorBrightness(bg_colour_, 0.2f)
+                                                  : hover_colour_;
+    }
+
+    // Override the above if disabled
+    if (!enabled_)
+    {
+        bg = ::ColorIsEqual(disabled_colour_, BLANK) ? ::Color(127, 127, 127, 255)
+                                                     : disabled_colour_;
     }
 
     if (shadow_)
@@ -63,12 +74,16 @@ void Button::draw() const
         const ::Rectangle shadow_rect{pos_.x + 4, pos_.y + 4, size_.x, size_.y};
 
         ::DrawRectangleRounded(
-            shadow_rect, 0.4f, 64, ::Fade(::ColorBrightness(bg, -0.4f), std::min(bg_colour_.a / 255.0f, 0.5f)));
+            shadow_rect,
+            0.5f,
+            64,
+            ::Fade(::ColorBrightness(bg, -0.4f), std::min(bg_colour_.a / 255.0f, 0.5f)));
     }
 
-    ::DrawRectangleRounded(rect, 0.4f, 64, bg);
+    ::DrawRectangleRounded(rect, 0.5f, 64, bg);
 
-    // The top need to be biased up a little because the text measure has a little more at the top than the bottom
+    // The top need to be biased up a little because the text measure has a little more at the top
+    // than the bottom
     const auto left = pos_.x + (size_.x / 2.0f - text_measure_.x / 2.0f);
     const auto top = pos_.y + (size_.y / 2.0f - text_measure_.y / 2.2f);
 
@@ -78,7 +93,7 @@ void Button::draw() const
 // Return whether the button is pressed.
 bool Button::update() const
 {
-    if (!::IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
+    if (!::IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || !enabled_)
     {
         return false;
     }

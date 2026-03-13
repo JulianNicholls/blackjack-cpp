@@ -20,6 +20,7 @@ struct ButtonSpec
     ::Color bg_colour;
     ::Color text_colour;
     ::Color hover_colour;
+    ::Color disabled_colour;
     ::Font font;
     std::size_t font_size;
     std::string_view caption;
@@ -34,16 +35,33 @@ class Button
     void draw() const;
     bool update() const;
 
+    void disable()
+    {
+        enabled_ = false;
+    };
+
+    void enable()
+    {
+        enabled_ = true;
+    };
+
+    bool enabled() const
+    {
+        return enabled_;
+    };
+
   private:
     ::Vector2 pos_;
     ::Vector2 size_;
     ::Color bg_colour_;
     ::Color text_colour_;
     ::Color hover_colour_;
+    ::Color disabled_colour_;
     ::Font font_;
     float font_size_;
     std::string caption_;
     bool shadow_;
+    bool enabled_;
     ::Vector2 text_measure_;
 };
 
