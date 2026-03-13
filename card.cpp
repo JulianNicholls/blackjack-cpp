@@ -28,15 +28,16 @@ Card::Card(
 
 void Card::draw(float x, float y) const
 {
-    ::DrawRectangleRounded({x, y, width_, height_}, 0.1f, 32, RAYWHITE);
-    ::DrawRectangleRoundedLines({x, y, width_, height_}, 0.1f, 32, BLACK);
-    const ::Vector2 pos{x + 5, y + 5};
-
     using enum Suit;
+
+    ::DrawRectangleRounded({x, y, width_, height_}, 0.1f, 32, RAYWHITE);   // Background
+    ::DrawRectangleRoundedLines({x, y, width_, height_}, 0.1f, 32, BLACK); // Border
+
+    const ::Vector2 pos{x + 5, y + 5};
 
     if (faceup_)
     {
-        const ::Color colour = suit_ == Suit::Spades || suit_ == Suit::Clubs ? BLACK : RED;
+        const ::Color colour = suit_ == Spades || suit_ == Clubs ? BLACK : RED;
 
         ::DrawTextEx(game_.font(), rank_name().c_str(), pos, 36, 0, colour);
         ::DrawTextureV(game_.images(suit_image_name()), {x + 30, y + 10}, WHITE);

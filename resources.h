@@ -1,8 +1,6 @@
 #ifndef CONSTANTS_H
 #define CONSTANTS_H
 
-#include <array>
-
 #include "raylib.h"
 
 namespace Blackjack::Constants
@@ -10,6 +8,7 @@ namespace Blackjack::Constants
 
 inline constexpr auto WindowMargin = 40zu;
 inline constexpr auto HandMargin = 60zu;
+inline constexpr auto ButtonMargin = 30zu;
 inline constexpr auto CardWidth = 250zu;
 inline constexpr auto CardHeight = 350zu;
 
@@ -19,6 +18,11 @@ inline constexpr ::Vector2 PlayerRowStart = {WindowMargin, 2 * WindowMargin + Ca
 
 inline constexpr auto Width = WindowMargin * 6 + 5 * CardWidth;
 inline constexpr auto Height = WindowMargin * 3 + 2 * CardHeight;
+
+inline constexpr ::Vector2 ButtonSize = {110, 60};
+inline constexpr ::Vector2 ButtonStart = {
+    Width - (WindowMargin + ButtonSize.x),
+    2 * WindowMargin + CardHeight};
 
 }
 

@@ -52,6 +52,10 @@ class Game
     Hand player_hand_;
     Hand dealer_hand_;
     Deck deck_;
+
+    CPPRaylib::Button hit_button_;
+    CPPRaylib::Button stand_button_;
+    CPPRaylib::Button split_button_;
 };
 
 }

@@ -29,9 +29,11 @@ class Hand
         {
             const auto card = cards_[idx];
 
-            card.draw(pos.x + idx * (/*card.width() +*/ Constants::HandMargin), pos.y);
+            card.draw(pos.x + idx * Constants::HandMargin, pos.y);
         }
     };
+
+    unsigned int value() const;
 
   private:
     std::vector<Card> cards_;

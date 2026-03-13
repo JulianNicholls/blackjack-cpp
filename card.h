@@ -53,6 +53,11 @@ class Card
         return height_;
     }
 
+    unsigned rank() const
+    {
+        return rank_;
+    }
+
     std::string suit_image_name() const;
 
     std::string to_string() const;
