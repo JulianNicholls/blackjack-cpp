@@ -21,7 +21,7 @@ et voila.
 
 ## Progress
 
-There is no gameplay as yet, it just displays two cards, and that's not even very nice :)
+There is no gameplay as yet, it displays a player hand, dealer hand and play buttons.
 
 ## Caveat
 

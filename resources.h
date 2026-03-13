@@ -16,10 +16,11 @@ inline constexpr ::Vector2 PackPosition = {3 * WindowMargin + 2 * CardWidth, Win
 inline constexpr ::Vector2 DealerRowStart = {WindowMargin, WindowMargin};
 inline constexpr ::Vector2 PlayerRowStart = {WindowMargin, 2 * WindowMargin + CardHeight};
 
-inline constexpr auto Width = WindowMargin * 6 + 5 * CardWidth;
-inline constexpr auto Height = WindowMargin * 3 + 2 * CardHeight;
-
 inline constexpr ::Vector2 ButtonSize = {110, 60};
+
+inline constexpr int Width = 2 * WindowMargin + CardWidth + HandMargin * 5 + ButtonSize.x;
+inline constexpr int Height = WindowMargin * 3 + 2 * CardHeight;
+
 inline constexpr ::Vector2 ButtonStart = {
     Width - (WindowMargin + ButtonSize.x),
     2 * WindowMargin + CardHeight};
