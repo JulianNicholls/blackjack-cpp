@@ -34,6 +34,7 @@ class Hand
     };
 
     unsigned int value() const;
+    void show();
 
   private:
     std::vector<Card> cards_;
