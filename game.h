@@ -43,6 +43,7 @@ class Game
 
   private:
     void drawPlaying() const;
+    void drawButtons() const;
     void drawComplete() const;
 
     const CPPRaylib::Window &window_;
@@ -58,6 +59,6 @@ class Game
     CPPRaylib::Button split_button_;
 };
 
-}
+} // namespace Blackjack
 
 #endif // GAME_H
