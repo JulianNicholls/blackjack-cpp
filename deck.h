@@ -11,7 +11,7 @@ namespace Blackjack
 class Deck
 {
   public:
-    Deck(const Game &game);
+    Deck();
 
     Card deal();
 
