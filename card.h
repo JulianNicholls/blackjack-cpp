@@ -24,13 +24,18 @@ class Card
 {
   public:
     Card(
-        const Game &game,
         unsigned rank,
         Suit suit,
         std::string_view backname,
         bool faceup = false,
         float width = Constants::CardWidth,
         float height = Constants::CardHeight);
+
+    Card(const Card &other) = default;
+    Card(Card &&other) = default;
+
+    Card &operator=(const Card &other) = default;
+    Card &operator=(Card &&other) = default;
 
     void draw(float x, float y) const;
     void draw(::Vector2 pos) const
@@ -67,13 +72,18 @@ class Card
 
     std::string to_string() const;
 
+    static void set_game(const Game *game)
+    {
+        game_ = game;
+    }
+
     friend void swap(Card &a, Card &b) noexcept;
 
   private:
     std::string rank_name() const;
     std::string suit_name() const;
 
-    const Game &game_;
+    static const Game *game_;
     unsigned rank_;
     Suit suit_;
     unsigned value_;

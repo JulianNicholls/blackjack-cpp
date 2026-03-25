@@ -7,16 +7,16 @@
 namespace Blackjack
 {
 
+const Game *Card::game_ = nullptr;
+
 Card::Card(
-    const Game &game,
     unsigned rank,
     Suit suit,
     std::string_view backname,
     bool faceup,
     float width,
     float height)
-    : game_{game}
-    , width_{width}
+    : width_{width}
     , height_{height}
     , rank_{rank}
     , suit_{suit}
@@ -39,12 +39,12 @@ void Card::draw(float x, float y) const
     {
         const ::Color colour = suit_ == Spades || suit_ == Clubs ? BLACK : RED;
 
-        ::DrawTextEx(game_.font(), rank_name().c_str(), pos, 36, 0, colour);
-        ::DrawTextureV(game_.images(suit_image_name()), {x + 30, y + 10}, WHITE);
+        ::DrawTextEx(game_->font(), rank_name().c_str(), pos, 36, 0, colour);
+        ::DrawTextureV(game_->images(suit_image_name()), {x + 30, y + 10}, WHITE);
     }
     else
     {
-        ::DrawTextureV(game_.images(backname_), pos, WHITE);
+        ::DrawTextureV(game_->images(backname_), pos, WHITE);
     }
 }
 
@@ -87,8 +87,6 @@ std::string Card::rank_name() const
 void swap(Card &a, Card &b) noexcept
 {
     using std::swap;
-
-    // No need (or possibiity) to swap Game&
 
     swap(a.rank_, b.rank_);
     swap(a.suit_, b.suit_);

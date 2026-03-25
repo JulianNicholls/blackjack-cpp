@@ -34,8 +34,8 @@ namespace Blackjack
 
 Game::Game(const CPPRaylib::Window &window)
     : window_{window}, state_{GameState::PLAYING},
-      font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 36, nullptr, 0)},
-      images_{CPPRaylib::ImageLoader{"../assets"}}, deck_{*this},
+      font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 48, nullptr, 0)},
+      images_{CPPRaylib::ImageLoader{"../assets"}}, 
       hit_button_{{.pos = Constants::ButtonStart,
                    .size = Constants::ButtonSize,
                    .bg_colour = GREEN,
@@ -64,14 +64,16 @@ Game::Game(const CPPRaylib::Window &window)
            .caption = "Split",
            .shadow = CPPRaylib::SHADOW}}
 {
+    Card::set_game(this);
+
     auto card1 = deck_.deal();
     auto card2 = deck_.deal();
 
     card1.flip();
     card2.flip();
 
-    std::println("{}", card1.to_string());
-    std::println("{}", card2.to_string());
+    // std::println("{}", card1.to_string());
+    // std::println("{}", card2.to_string());
 
     player_hand_.add(card1);
     player_hand_.add(card2);
@@ -84,8 +86,8 @@ Game::Game(const CPPRaylib::Window &window)
 
     card3.flip();
 
-    std::println("{}", card3.to_string());
-    std::println("{}", card4.to_string());
+    // std::println("{}", card3.to_string());
+    // std::println("{}", card4.to_string());
 
     dealer_hand_.add(card3);
     dealer_hand_.add(card4);
