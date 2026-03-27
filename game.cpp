@@ -34,13 +34,14 @@ namespace Blackjack
 
 Game::Game(const CPPRaylib::Window &window)
     : window_{window}, state_{GameState::PLAYING},
-      font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 48, nullptr, 0)},
+      small_font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 36, nullptr, 0)},
+      large_font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 48, nullptr, 0)},
       images_{CPPRaylib::ImageLoader{"../assets"}}, 
       hit_button_{{.pos = Constants::ButtonStart,
                    .size = Constants::ButtonSize,
                    .bg_colour = GREEN,
                    .text_colour = WHITE,
-                   .font = font_,
+                   .font = small_font_,
                    .caption = "Hit Me",
                    .shadow = CPPRaylib::SHADOW}},
       stand_button_{
@@ -50,7 +51,7 @@ Game::Game(const CPPRaylib::Window &window)
            .size = Constants::ButtonSize,
            .bg_colour = BLUE,
            .text_colour = WHITE,
-           .font = font_,
+           .font = small_font_,
            .caption = "Stand",
            .shadow = CPPRaylib::SHADOW}},
       split_button_{
@@ -60,7 +61,7 @@ Game::Game(const CPPRaylib::Window &window)
            .size = Constants::ButtonSize,
            .bg_colour = BROWN,
            .text_colour = WHITE,
-           .font = font_,
+           .font = small_font_,
            .caption = "Split",
            .shadow = CPPRaylib::SHADOW}}
 {
@@ -99,7 +100,7 @@ Game::~Game()
 
 void Game::run()
 {
-    while (!::WindowShouldClose() && state_ != GameState::COMPLETE)
+    while (!window_.ShouldClose() && state_ != GameState::COMPLETE)
     {
         update();
 
@@ -124,8 +125,14 @@ void Game::update()
 
     if (stand_button_.update())
     {
-        dealer_hand_.show();
+        show_dealer();
     }
+}
+
+void Game::show_dealer()
+{
+    dealer_hand_.show();
+    show_dealer_value_ = true;
 }
 
 void Game::draw() const
@@ -153,15 +160,29 @@ void Game::drawPlaying() const
     dealer_hand_.draw(DealerRowStart);
     player_hand_.draw(PlayerRowStart);
 
+    if (show_dealer_value_)
+    {
+        ::DrawTextEx(
+            large_font_,
+            std::to_string(dealer_hand_.value()).c_str(),
+            DealerValuePosition,
+            48,
+            1,
+            WHITE);
+    }
+
     ::DrawTextEx(
-        font_, std::to_string(dealer_hand_.value()).c_str(), DealerValuePosition, 48, 1, WHITE);
-    ::DrawTextEx(
-        font_, std::to_string(player_hand_.value()).c_str(), PlayerValuePosition, 48, 1, WHITE);
+        large_font_,
+        std::to_string(player_hand_.value()).c_str(),
+        PlayerValuePosition,
+        48,
+        1,
+        WHITE);
 }
 
 void Game::drawComplete() const
 {
-    centre(window_, font_, "Complete", Constants::Height / 2.0f, 36, 1, BLACK);
+    centre(window_, small_font_, "Complete", Constants::Height / 2.0f, 36, 1, BLACK);
 }
 
 } // namespace Blackjack

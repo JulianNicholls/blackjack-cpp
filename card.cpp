@@ -1,3 +1,5 @@
+#include <algorithm>
+
 #include "raylib.h"
 #include <format>
 
@@ -23,7 +25,7 @@ Card::Card(
     , backname_{backname}
     , faceup_{faceup}
 {
-    value_ = rank == 1 ? 11 : rank;
+    value_ = rank == 1 ? 11 : std::min(rank, 10u);
 }
 
 void Card::draw(float x, float y) const
@@ -39,7 +41,7 @@ void Card::draw(float x, float y) const
     {
         const ::Color colour = suit_ == Spades || suit_ == Clubs ? BLACK : RED;
 
-        ::DrawTextEx(game_->font(), rank_name().c_str(), pos, 36, 0, colour);
+        ::DrawTextEx(game_->small_font(), rank_name().c_str(), pos, 36, 0, colour);
         ::DrawTextureV(game_->images(suit_image_name()), {x + 30, y + 10}, WHITE);
     }
     else

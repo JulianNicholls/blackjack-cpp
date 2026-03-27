@@ -31,9 +31,9 @@ class Game
     void update();
     void draw() const;
 
-    const ::Font &font() const
+    const ::Font &small_font() const
     {
-        return font_;
+        return small_font_;
     };
 
     const ::Texture2D images(std::string_view name) const
@@ -45,10 +45,12 @@ class Game
     void drawPlaying() const;
     void drawButtons() const;
     void drawComplete() const;
+    void show_dealer();
 
     const CPPRaylib::Window &window_;
     GameState state_;
-    const ::Font font_;
+    const ::Font small_font_;
+    const ::Font large_font_;
     CPPRaylib::ImageLoader images_;
     Hand player_hand_;
     Hand dealer_hand_;
@@ -57,6 +59,8 @@ class Game
     CPPRaylib::Button hit_button_;
     CPPRaylib::Button stand_button_;
     CPPRaylib::Button split_button_;
+
+    bool show_dealer_value_ = false;
 };
 
 } // namespace Blackjack
