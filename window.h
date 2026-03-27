@@ -41,6 +41,11 @@ struct Window
         ::CloseWindow();
     }
 
+    bool ShouldClose() const
+    {
+        return ::WindowShouldClose();
+    }
+
     int width;
     int height;
 };
