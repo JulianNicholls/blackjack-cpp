@@ -67,6 +67,18 @@ Game::Game(const CPPRaylib::Window &window)
 {
     Card::set_game(this);
 
+    start();
+}
+
+Game::~Game()
+{
+}
+
+void Game::start()
+{
+    dealer_hand_.clear();
+    player_hand_.clear();
+
     auto card1 = deck_.deal();
     auto card2 = deck_.deal();
 
@@ -92,10 +104,6 @@ Game::Game(const CPPRaylib::Window &window)
 
     dealer_hand_.add(card3);
     dealer_hand_.add(card4);
-}
-
-Game::~Game()
-{
 }
 
 void Game::run()

@@ -14,7 +14,12 @@ class Hand
 {
   public:
     Hand() = default;
-    Hand(const Game &game) = delete;
+    Hand(const Hand &other) = delete;
+
+    void clear()
+    {
+        cards_.clear();
+    }
 
     void add(const Card &c)
     {

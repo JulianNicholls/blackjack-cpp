@@ -42,6 +42,7 @@ class Game
     }
 
   private:
+    void start();
     void drawPlaying() const;
     void drawButtons() const;
     void drawComplete() const;
