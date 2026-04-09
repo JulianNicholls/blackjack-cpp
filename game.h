@@ -15,10 +15,12 @@ namespace Blackjack
 
 enum struct GameState
 {
-    PLAYING,
-    SUCCESS,
-    FAILURE,
-    COMPLETE
+    INITIALISING,
+    PLAYER_TURN,
+    DEALER_TURN,
+    COMPARISON,
+    CHOICE,
+    EXIT
 };
 
 class Game

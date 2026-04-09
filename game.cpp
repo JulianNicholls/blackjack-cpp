@@ -33,7 +33,7 @@ namespace Blackjack
 {
 
 Game::Game(const CPPRaylib::Window &window)
-    : window_{window}, state_{GameState::PLAYING},
+    : window_{window}, state_{GameState::INITIALISING},
       small_font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 36, nullptr, 0)},
       large_font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 48, nullptr, 0)},
       images_{CPPRaylib::ImageLoader{"../assets"}}, 
@@ -108,7 +108,7 @@ void Game::start()
 
 void Game::run()
 {
-    while (!window_.ShouldClose() && state_ != GameState::COMPLETE)
+    while (!window_.ShouldClose() && state_ != GameState::EXIT)
     {
         update();
 
@@ -122,6 +122,8 @@ void Game::run()
 
 void Game::update()
 {
+    using enum GameState;
+
     if (hit_button_.update())
     {
         auto card = deck_.deal();
