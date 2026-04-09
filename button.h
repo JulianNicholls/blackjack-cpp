@@ -50,9 +50,18 @@ class Button
         return enabled_;
     };
 
+    void set_caption(std::string_view caption)
+    {
+        caption_ = caption;
+        measure_caption();
+    }
+
   private:
+    void measure_caption();
+
     ::Vector2 pos_;
     ::Vector2 size_;
+    bool autosized_;
     ::Color bg_colour_;
     ::Color text_colour_;
     ::Color hover_colour_;

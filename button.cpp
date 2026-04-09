@@ -16,30 +16,12 @@ Button::Button(const ButtonSpec &spec)
     , caption_{spec.caption}
     , shadow_{spec.shadow}
     , enabled_{true} // Always start enabled
+    , autosized_{spec.size.x == AUTO}
+    , size_{spec.size}
 {
     font_size_ = spec.font_size == AUTO ? 36 : spec.font_size;
 
-    text_measure_ = ::MeasureTextEx(font_, caption_.c_str(), font_size_, 1);
-
-    if (spec.size.x == AUTO)
-    {
-        // Use the text measure
-        auto width = text_measure_.x + font_size_;
-        auto height = text_measure_.y + font_size_ / 3.0f;
-
-        // If it's too square, i.e. less than 16x9, shave the height a little
-        if (width < height * 1.77f)
-        {
-            // Flood::log::debug("{} Button: {} x {} adjusted", caption_, width, height);
-            height *= 0.9f;
-        }
-
-        size_ = {width, height};
-    }
-    else
-    {
-        size_ = spec.size;
-    }
+    measure_caption();
 
     // If the x or y position is negative, then it should be set so that the position is centred on
     // that as a positive value.
@@ -93,7 +75,7 @@ void Button::draw() const
 // Return whether the button is pressed.
 bool Button::update() const
 {
-    if (!::IsMouseButtonPressed(MOUSE_LEFT_BUTTON) || !enabled_)
+    if (!enabled_ || !::IsMouseButtonPressed(MOUSE_LEFT_BUTTON))
     {
         return false;
     }
@@ -101,6 +83,26 @@ bool Button::update() const
     const ::Rectangle rect{pos_.x, pos_.y, size_.x, size_.y};
 
     return ::CheckCollisionPointRec(::GetMousePosition(), rect);
+}
+
+void Button::measure_caption()
+{
+    text_measure_ = ::MeasureTextEx(font_, caption_.c_str(), font_size_, 1);
+
+    if (autosized_)
+    {
+        // Use the text measure
+        auto width = text_measure_.x + font_size_;
+        auto height = text_measure_.y + font_size_ / 3.0f;
+
+        // If it's too square, i.e. less than 16x9, shave the height a little
+        if (width < height * 1.77f)
+        {
+            height *= 0.9f;
+        }
+
+        size_ = {width, height};
+    }
 }
 
 } // namespace CPPRayLib
