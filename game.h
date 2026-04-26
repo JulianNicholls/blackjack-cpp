@@ -16,6 +16,7 @@ namespace Blackjack
 enum struct GameState
 {
     INITIALISING,
+    DEALING,
     PLAYER_TURN,
     DEALER_TURN,
     COMPARISON,
@@ -45,6 +46,7 @@ class Game
 
   private:
     void start();
+    void deal();
     void drawPlaying() const;
     void drawButtons() const;
     void drawComplete() const;
@@ -64,6 +66,7 @@ class Game
     CPPRaylib::Button split_button_;
 
     bool show_dealer_value_ = false;
+    unsigned deal_phase_;
 };
 
 } // namespace Blackjack

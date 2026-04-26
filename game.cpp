@@ -1,4 +1,5 @@
 #include <print>
+#include <thread>
 
 #include "raylib.h"
 
@@ -8,6 +9,8 @@
 #include "hand.h"
 #include "images.h"
 #include "resources.h"
+
+using namespace std::chrono_literals;
 
 namespace
 {
@@ -33,7 +36,9 @@ namespace Blackjack
 {
 
 Game::Game(const CPPRaylib::Window &window)
-    : window_{window}, state_{GameState::INITIALISING},
+    : window_{window}, 
+      state_{GameState::INITIALISING}, 
+      deal_phase_{0},
       small_font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 36, nullptr, 0)},
       large_font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 48, nullptr, 0)},
       images_{CPPRaylib::ImageLoader{"../assets"}}, 
@@ -78,32 +83,46 @@ void Game::start()
 {
     dealer_hand_.clear();
     player_hand_.clear();
+    deal_phase_ = 0;
+}
 
-    auto card1 = deck_.deal();
-    auto card2 = deck_.deal();
+void Game::deal()
+{
+    switch (deal_phase_)
+    {
+        case 0:
+        case 4:
+        {
+            auto card = deck_.deal();
+            card.flip();
+            player_hand_.add(card);
+            break;
+        }
 
-    card1.flip();
-    card2.flip();
+        case 2:
+        {
+            auto card = deck_.deal();
+            card.flip();
+            dealer_hand_.add(card);
+            break;
+        }
 
-    // std::println("{}", card1.to_string());
-    // std::println("{}", card2.to_string());
+        case 6:
+        {
+            auto card = deck_.deal();
+            dealer_hand_.add(card);
+            break;
+        }
 
-    player_hand_.add(card1);
-    player_hand_.add(card2);
+        case 1:
+        case 3:
+        case 5:
+        case 7: std::this_thread::sleep_for(250ms); break;
 
-    if (card1.rank() != card2.rank())
-        split_button_.disable();
+        case 8: state_ = GameState::PLAYER_TURN; break;
+    }
 
-    auto card3 = deck_.deal();
-    auto card4 = deck_.deal();
-
-    card3.flip();
-
-    // std::println("{}", card3.to_string());
-    // std::println("{}", card4.to_string());
-
-    dealer_hand_.add(card3);
-    dealer_hand_.add(card4);
+    ++deal_phase_;
 }
 
 void Game::run()
@@ -124,18 +143,36 @@ void Game::update()
 {
     using enum GameState;
 
-    if (hit_button_.update())
+    switch (state_)
     {
-        auto card = deck_.deal();
+        case INITIALISING:
+            start();
+            state_ = DEALING;
+            break;
 
-        card.flip();
+        case DEALING: deal(); break;
 
-        player_hand_.add(card);
-    }
+        case PLAYER_TURN:
+            if (hit_button_.update())
+            {
+                auto card = deck_.deal();
 
-    if (stand_button_.update())
-    {
-        show_dealer();
+                card.flip();
+
+                player_hand_.add(card);
+            }
+
+            if (stand_button_.update())
+            {
+                show_dealer();
+                state_ = DEALER_TURN;
+            }
+            break;
+
+        case DEALER_TURN:
+        case COMPARISON:
+        case CHOICE:
+        case EXIT: break;
     }
 }
 
