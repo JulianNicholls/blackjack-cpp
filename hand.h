@@ -38,6 +38,10 @@ class Hand
 
     unsigned int value() const;
     void show();
+    size_t size() const
+    {
+        return cards_.size();
+    }
 
   private:
     std::vector<Card> cards_;

@@ -14,17 +14,19 @@ namespace Blackjack
 // Construct a two-deck shoe
 Deck::Deck()
 {
+    using enum Suit;
+
     for (unsigned r = 1; r <= 13; ++r)
     {
-        cards_.emplace_back(r, Suit::Clubs, "CardBackRed");
-        cards_.emplace_back(r, Suit::Diamonds, "CardBackRed");
-        cards_.emplace_back(r, Suit::Hearts, "CardBackRed");
-        cards_.emplace_back(r, Suit::Spades, "CardBackRed");
+        cards_.emplace_back(r, Clubs, "CardBackRed");
+        cards_.emplace_back(r, Diamonds, "CardBackRed");
+        cards_.emplace_back(r, Hearts, "CardBackRed");
+        cards_.emplace_back(r, Spades, "CardBackRed");
 
-        cards_.emplace_back(r, Suit::Clubs, "CardBackBlue");
-        cards_.emplace_back(r, Suit::Diamonds, "CardBackBlue");
-        cards_.emplace_back(r, Suit::Hearts, "CardBackBlue");
-        cards_.emplace_back(r, Suit::Spades, "CardBackBlue");
+        cards_.emplace_back(r, Clubs, "CardBackBlue");
+        cards_.emplace_back(r, Diamonds, "CardBackBlue");
+        cards_.emplace_back(r, Hearts, "CardBackBlue");
+        cards_.emplace_back(r, Spades, "CardBackBlue");
     }
 
     std::shuffle(cards_.begin(), cards_.end(), mt);
