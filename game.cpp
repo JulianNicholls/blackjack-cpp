@@ -39,6 +39,7 @@ Game::Game(const CPPRaylib::Window &window)
     : window_{window}, 
       state_{GameState::INITIALISING}, 
       deal_phase_{0},
+      dealer_turn_phase_{0},
       small_font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 36, nullptr, 0)},
       large_font_{LoadFontEx("../assets/BebasNeue-Regular.ttf", 48, nullptr, 0)},
       images_{CPPRaylib::ImageLoader{"../assets"}}, 
@@ -117,7 +118,7 @@ void Game::deal()
         case 1:
         case 3:
         case 5:
-        case 7: std::this_thread::sleep_for(250ms); break;
+        case 7: std::this_thread::sleep_for(500ms); break;
 
         case 8: state_ = GameState::PLAYER_TURN; break;
     }
@@ -152,34 +153,68 @@ void Game::update()
 
         case DEALING: deal(); break;
 
-        case PLAYER_TURN:
-            if (hit_button_.update())
-            {
-                auto card = deck_.deal();
+        case PLAYER_TURN: player_update(); break;
 
-                card.flip();
+        case DEALER_TURN: dealer_update(); break;
 
-                player_hand_.add(card);
-            }
-
-            if (stand_button_.update())
-            {
-                show_dealer();
-                state_ = DEALER_TURN;
-            }
-            break;
-
-        case DEALER_TURN:
         case COMPARISON:
         case CHOICE:
         case EXIT: break;
     }
 }
 
+void Game::player_update()
+{
+    using enum GameState;
+
+    if (hit_button_.update())
+    {
+        auto card = deck_.deal();
+
+        card.flip();
+
+        player_hand_.add(card);
+
+        if (player_hand_.size() == 5 || player_hand_.value() > 21)
+        {
+            show_dealer();
+        }
+    }
+
+    if (stand_button_.update())
+    {
+        show_dealer();
+    }
+}
+
+void Game::dealer_update()
+{
+    if (dealer_turn_phase_ % 2 == 0)
+    {
+        std::this_thread::sleep_for(1s);
+    }
+    else
+    {
+        auto card = deck_.deal();
+        card.flip();
+        dealer_hand_.add(card);
+
+        if (dealer_hand_.value() >= 17 || dealer_hand_.size() == 5)
+        {
+            state_ = GameState::COMPARISON;
+        }
+    }
+
+    ++dealer_turn_phase_;
+}
+
 void Game::show_dealer()
 {
     dealer_hand_.show();
     show_dealer_value_ = true;
+
+    dealer_turn_phase_ = 0;
+    state_ = GameState::DEALER_TURN;
 }
 
 void Game::draw() const
@@ -189,18 +224,18 @@ void Game::draw() const
     ::DrawRectangleGradientV(
         0, 0, Width, Height, ::Color{0, 120, 50, 255}, ::Color{0, 60, 30, 255});
 
-    drawPlaying();
-    drawButtons();
+    draw_playing();
+    draw_buttons();
 }
 
-void Game::drawButtons() const
+void Game::draw_buttons() const
 {
     hit_button_.draw();
     stand_button_.draw();
     split_button_.draw();
 }
 
-void Game::drawPlaying() const
+void Game::draw_playing() const
 {
     using namespace Constants;
 
@@ -209,25 +244,28 @@ void Game::drawPlaying() const
 
     if (show_dealer_value_)
     {
+        auto value = dealer_hand_.value();
         ::DrawTextEx(
             large_font_,
-            std::to_string(dealer_hand_.value()).c_str(),
+            value <= 21 ? std::to_string(value).c_str() : "Bust",
             DealerValuePosition,
             48,
             1,
             WHITE);
     }
 
+    auto value = player_hand_.value();
+
     ::DrawTextEx(
         large_font_,
-        std::to_string(player_hand_.value()).c_str(),
+        value <= 21 ? std::to_string(value).c_str() : "Bust",
         PlayerValuePosition,
         48,
         1,
         WHITE);
 }
 
-void Game::drawComplete() const
+void Game::draw_complete() const
 {
     centre(window_, small_font_, "Complete", Constants::Height / 2.0f, 36, 1, BLACK);
 }

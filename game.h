@@ -47,9 +47,11 @@ class Game
   private:
     void start();
     void deal();
-    void drawPlaying() const;
-    void drawButtons() const;
-    void drawComplete() const;
+    void player_update();
+    void dealer_update();
+    void draw_playing() const;
+    void draw_buttons() const;
+    void draw_complete() const;
     void show_dealer();
 
     const CPPRaylib::Window &window_;
@@ -67,6 +69,7 @@ class Game
 
     bool show_dealer_value_ = false;
     unsigned deal_phase_;
+    unsigned dealer_turn_phase_;
 };
 
 } // namespace Blackjack
