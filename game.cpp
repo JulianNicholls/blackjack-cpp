@@ -52,8 +52,8 @@ Game::Game(const CPPRaylib::Window &window)
                    .shadow = CPPRaylib::SHADOW}},
       stand_button_{
           {.pos = {Constants::ButtonStart.x, Constants::ButtonStart.y +
-                                                 Constants::ButtonSize.y +
-                                                 Constants::ButtonMargin},
+                                             Constants::ButtonSize.y +
+                                             Constants::ButtonMargin},
            .size = Constants::ButtonSize,
            .bg_colour = BLUE,
            .text_colour = WHITE,
@@ -69,6 +69,22 @@ Game::Game(const CPPRaylib::Window &window)
            .text_colour = WHITE,
            .font = small_font_,
            .caption = "Split",
+           .shadow = CPPRaylib::SHADOW}},
+      replay_button_{
+          {.pos = {230, 150 + Constants::Height - 360},
+           .size = Constants::SmallButtonSize,
+           .bg_colour = GREEN,
+           .text_colour = WHITE,
+           .font = small_font_,
+           .caption = "Play",
+           .shadow = CPPRaylib::SHADOW}},
+      exit_button_{
+          {.pos = {350, 150 + Constants::Height - 360},
+           .size = Constants::SmallButtonSize,
+           .bg_colour = BLUE,
+           .text_colour = WHITE,
+           .font = small_font_,
+           .caption = "Exit",
            .shadow = CPPRaylib::SHADOW}}
 {
     Card::set_game(this);
@@ -157,8 +173,8 @@ void Game::update()
 
         case DEALER_TURN: dealer_update(); break;
 
-        case COMPARISON:
-        case CHOICE:
+        case COMPLETE: complete_update(); break;
+
         case EXIT: break;
     }
 }
@@ -201,11 +217,15 @@ void Game::dealer_update()
 
         if (dealer_hand_.value() >= 17 || dealer_hand_.size() == 5)
         {
-            state_ = GameState::COMPARISON;
+            state_ = GameState::COMPLETE;
         }
     }
 
     ++dealer_turn_phase_;
+}
+
+void Game::complete_update()
+{
 }
 
 void Game::show_dealer()
@@ -226,6 +246,9 @@ void Game::draw() const
 
     draw_playing();
     draw_buttons();
+
+    if (state_ == GameState::COMPLETE)
+        draw_complete();
 }
 
 void Game::draw_buttons() const
@@ -267,7 +290,18 @@ void Game::draw_playing() const
 
 void Game::draw_complete() const
 {
-    centre(window_, small_font_, "Complete", Constants::Height / 2.0f, 36, 1, BLACK);
+    using namespace Constants;
+
+    ::DrawRectangleRounded({145, 145, Width - 290, Height - 290}, 0.1f, 64, ::Color(0, 0, 0, 128));
+    ::DrawRectangleRounded({150, 150, Width - 300, Height - 300}, 0.1f, 64, RAYWHITE);
+
+    draw_completion_buttons();
+}
+
+void Game::draw_completion_buttons() const
+{
+    replay_button_.draw();
+    exit_button_.draw();
 }
 
 } // namespace Blackjack

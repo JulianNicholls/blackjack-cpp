@@ -19,8 +19,7 @@ enum struct GameState
     DEALING,
     PLAYER_TURN,
     DEALER_TURN,
-    COMPARISON,
-    CHOICE,
+    COMPLETE,
     EXIT
 };
 
@@ -49,8 +48,10 @@ class Game
     void deal();
     void player_update();
     void dealer_update();
+    void complete_update();
     void draw_playing() const;
     void draw_buttons() const;
+    void draw_completion_buttons() const;
     void draw_complete() const;
     void show_dealer();
 
@@ -66,6 +67,8 @@ class Game
     CPPRaylib::Button hit_button_;
     CPPRaylib::Button stand_button_;
     CPPRaylib::Button split_button_;
+    CPPRaylib::Button replay_button_;
+    CPPRaylib::Button exit_button_;
 
     bool show_dealer_value_ = false;
     unsigned deal_phase_;

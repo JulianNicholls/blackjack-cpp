@@ -20,6 +20,7 @@ inline constexpr ::Vector2 DealerValuePosition = {WindowMargin + HandMargin * 9,
 inline constexpr ::Vector2 PlayerValuePosition = {WindowMargin + HandMargin * 9, PlayerRowStart.y};
 
 inline constexpr ::Vector2 ButtonSize = {110, 60};
+inline constexpr ::Vector2 SmallButtonSize = {80, 40};
 
 inline constexpr int Width = 2 * WindowMargin + CardWidth + HandMargin * 7 + ButtonSize.x;
 inline constexpr int Height = WindowMargin * 3 + 2 * CardHeight;
