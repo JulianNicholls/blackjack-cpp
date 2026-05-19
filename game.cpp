@@ -226,6 +226,10 @@ void Game::dealer_update()
 
 void Game::complete_update()
 {
+    if (exit_button_.update())
+    {
+        state_ = GameState::EXIT;
+    }
 }
 
 void Game::show_dealer()
