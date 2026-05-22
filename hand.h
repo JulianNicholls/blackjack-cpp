@@ -43,6 +43,27 @@ class Hand
         return cards_.size();
     }
 
+    bool operator==(const Hand &other) const
+    {
+        const auto left = value();
+        const auto right = other.value();
+
+        return (left <= 21 && right <= 21 && size() != 5 && other.size() != 5 && left == right);
+    }
+
+    bool operator>(const Hand &other) const
+    {
+        const auto left = value();
+        const auto right = other.value();
+
+        if (right > 21)
+        { // Other is bust, this is greater
+            return true;
+        }
+
+        return left <= 21 && (left > right || size() == 5);
+    }
+
   private:
     std::vector<Card> cards_;
 };
