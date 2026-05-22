@@ -271,7 +271,8 @@ void Game::draw_playing() const
 
     if (show_dealer_value_)
     {
-        auto value = dealer_hand_.value();
+        const auto value = dealer_hand_.value();
+
         ::DrawTextEx(
             large_font_,
             value <= 21 ? std::to_string(value).c_str() : "Bust",
@@ -281,7 +282,7 @@ void Game::draw_playing() const
             WHITE);
     }
 
-    auto value = player_hand_.value();
+    const auto value = player_hand_.value();
 
     ::DrawTextEx(
         large_font_,
@@ -298,6 +299,18 @@ void Game::draw_complete() const
 
     ::DrawRectangleRounded({145, 145, Width - 290, Height - 290}, 0.1f, 64, ::Color(0, 0, 0, 128));
     ::DrawRectangleRounded({150, 150, Width - 300, Height - 300}, 0.1f, 64, RAYWHITE);
+
+    const auto p = player_hand_.value();
+    const auto d = dealer_hand_.value();
+
+    if (p <= 21 && (p > d || player_hand_.size() == 5))
+    {
+        centre(window_, large_font_, "You won", 170, 64, 0, DARKGREEN);
+    }
+    else
+    {
+        centre(window_, large_font_, "You lost", 170, 64, 0, RED);
+    }
 
     draw_completion_buttons();
 }
