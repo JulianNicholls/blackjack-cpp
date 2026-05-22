@@ -71,7 +71,7 @@ Game::Game(const CPPRaylib::Window &window)
            .caption = "Split",
            .shadow = CPPRaylib::SHADOW}},
       replay_button_{
-          {.pos = {230, 150 + Constants::Height - 360},
+          {.pos = {320, 260},
            .size = Constants::SmallButtonSize,
            .bg_colour = GREEN,
            .text_colour = WHITE,
@@ -79,7 +79,7 @@ Game::Game(const CPPRaylib::Window &window)
            .caption = "Play",
            .shadow = CPPRaylib::SHADOW}},
       exit_button_{
-          {.pos = {350, 150 + Constants::Height - 360},
+          {.pos = {440, 260},
            .size = Constants::SmallButtonSize,
            .bg_colour = BLUE,
            .text_colour = WHITE,
@@ -101,6 +101,9 @@ void Game::start()
     dealer_hand_.clear();
     player_hand_.clear();
     deal_phase_ = 0;
+    dealer_turn_phase_ = 0;
+
+    state_ = GameState::INITIALISING;
 }
 
 void Game::deal()
@@ -226,6 +229,11 @@ void Game::dealer_update()
 
 void Game::complete_update()
 {
+    if (replay_button_.update())
+    {
+        start();
+    }
+
     if (exit_button_.update())
     {
         state_ = GameState::EXIT;
@@ -297,21 +305,24 @@ void Game::draw_complete() const
 {
     using namespace Constants;
 
-    ::DrawRectangleRounded({145, 145, Width - 290, Height - 290}, 0.1f, 64, ::Color(0, 0, 0, 128));
-    ::DrawRectangleRounded({150, 150, Width - 300, Height - 300}, 0.1f, 64, RAYWHITE);
+    ::DrawRectangleRounded({145, 145, Width - 290, 210}, 0.1f, 64, ::Color(0, 0, 0, 128));
+    ::DrawRectangleRounded({150, 150, Width - 300, 200}, 0.1f, 64, RAYWHITE);
 
-    const auto p = player_hand_.value();
-    const auto d = dealer_hand_.value();
-
-    if (p <= 21 && (p > d || player_hand_.size() == 5))
+    if (player_hand_ == dealer_hand_)
     {
-        centre(window_, large_font_, "You won", 170, 64, 0, DARKGREEN);
+        centre(window_, large_font_, "It's a tie", 170, 64, 0, DARKGREEN);
     }
     else
     {
-        centre(window_, large_font_, "You lost", 170, 64, 0, RED);
+        if (player_hand_ > dealer_hand_)
+        {
+            centre(window_, large_font_, "You won", 170, 64, 0, DARKGREEN);
+        }
+        else
+        {
+            centre(window_, large_font_, "You lost", 170, 64, 0, RED);
+        }
     }
-
     draw_completion_buttons();
 }
 
