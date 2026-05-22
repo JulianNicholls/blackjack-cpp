@@ -11,8 +11,13 @@ std::mt19937 mt(rd());
 namespace Blackjack
 {
 
-// Construct a two-deck shoe
 Deck::Deck()
+{
+    fill_shoe();
+}
+
+// Construct a two-deck shoe
+void Deck::fill_shoe()
 {
     using enum Suit;
 
@@ -34,6 +39,11 @@ Deck::Deck()
 
 Card Deck::deal()
 {
+    if (cards_.size() == 0)
+    {
+        fill_shoe();
+    }
+
     Card next = std::move(cards_.back());
 
     cards_.pop_back();

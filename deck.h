@@ -16,6 +16,8 @@ class Deck
     Card deal();
 
   private:
+    void fill_shoe();
+
     std::vector<Card> cards_;
 };
 
