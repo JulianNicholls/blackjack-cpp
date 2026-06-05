@@ -8,6 +8,7 @@
 #include "game.h"
 #include "hand.h"
 #include "images.h"
+// #include "log.h"
 #include "resources.h"
 
 using namespace std::chrono_literals;
@@ -102,44 +103,47 @@ void Game::start()
     player_hand_.clear();
     deal_phase_ = 0;
     dealer_turn_phase_ = 0;
+    show_dealer_value_ = false;
 
     state_ = GameState::INITIALISING;
 }
 
 void Game::deal()
 {
-    switch (deal_phase_)
+    if (deal_phase_ % 2 == 1)
     {
-        case 0:
-        case 4:
+        std::this_thread::sleep_for(500ms);
+    }
+    else
+    {
+        switch (deal_phase_)
         {
-            auto card = deck_.deal();
-            card.flip();
-            player_hand_.add(card);
-            break;
+            case 0:
+            case 4:
+            {
+                auto card = deck_.deal();
+                card.flip();
+                player_hand_.add(card);
+                break;
+            }
+
+            case 2:
+            {
+                auto card = deck_.deal();
+                card.flip();
+                dealer_hand_.add(card);
+                break;
+            }
+
+            case 6:
+            {
+                auto card = deck_.deal();
+                dealer_hand_.add(card);
+                break;
+            }
+
+            case 8: state_ = GameState::PLAYER_TURN; break;
         }
-
-        case 2:
-        {
-            auto card = deck_.deal();
-            card.flip();
-            dealer_hand_.add(card);
-            break;
-        }
-
-        case 6:
-        {
-            auto card = deck_.deal();
-            dealer_hand_.add(card);
-            break;
-        }
-
-        case 1:
-        case 3:
-        case 5:
-        case 7: std::this_thread::sleep_for(500ms); break;
-
-        case 8: state_ = GameState::PLAYER_TURN; break;
     }
 
     ++deal_phase_;
@@ -214,13 +218,17 @@ void Game::dealer_update()
     }
     else
     {
-        auto card = deck_.deal();
-        card.flip();
-        dealer_hand_.add(card);
+        // log::info("Dealer Hand Value: {}", dealer_hand_.value());
 
         if (dealer_hand_.value() >= 17 || dealer_hand_.size() == 5)
         {
             state_ = GameState::COMPLETE;
+        }
+        else
+        {
+            auto card = deck_.deal();
+            card.flip();
+            dealer_hand_.add(card);
         }
     }
 
@@ -254,7 +262,7 @@ void Game::draw() const
     using namespace Constants;
 
     ::DrawRectangleGradientV(
-        0, 0, Width, Height, ::Color{0, 120, 50, 255}, ::Color{0, 60, 30, 255});
+        0, 0, Width, Height, ::Color{0, 150, 50, 255}, ::Color{0, 80, 30, 255});
 
     draw_playing();
     draw_buttons();
@@ -310,7 +318,7 @@ void Game::draw_complete() const
 
     if (player_hand_ == dealer_hand_)
     {
-        centre(window_, large_font_, "It's a tie", 170, 64, 0, DARKGREEN);
+        centre(window_, large_font_, "It's a tie", 170, 64, 0, DARKBLUE);
     }
     else
     {
