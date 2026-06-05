@@ -21,7 +21,7 @@ et voila.
 
 ## Progress
 
-There is no gameplay as yet, it displays a player hand, dealer hand and play buttons.
+It is fully playable now and works properly :)
 
 ## Caveat
 
